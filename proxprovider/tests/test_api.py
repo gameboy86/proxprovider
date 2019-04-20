@@ -27,4 +27,3 @@ class TestProxyApi(unittest.TestCase):
         )
 
         self.assertEqual(pro['doc'], 'TEST DOC')
-
