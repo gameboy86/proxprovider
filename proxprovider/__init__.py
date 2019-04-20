@@ -12,4 +12,3 @@ ProxyApi.registry_dir(
     )
 )
 ProxyApi.loads_models()
-

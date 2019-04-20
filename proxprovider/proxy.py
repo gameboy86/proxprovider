@@ -66,12 +66,11 @@ class Proxies:
         return ps
 
     def block_address(self, address):
-        self.__proxies_used -= {address}
-        self.__proxies_blocked.add(address)
+        self.block_addresses([address])
 
-    def block_addresses(self, addressed):
-        self.__proxies_used -= {addressed}
-        self.__proxies_blocked.update(addressed)
+    def block_addresses(self, addresses):
+        self.__proxies_used -= {*addresses}
+        self.__proxies_blocked.update(addresses)
 
     def clear_blocked(self):
         self.__proxies_blocked = set()
@@ -86,10 +85,11 @@ class Proxies:
         self.__proxies_used.add(ps[0])
         return ps[0]
 
-    def get_proxies(self, count=1, use_blocked=False, use_used=False):
+    def get_proxies(self, count=None, use_blocked=False, use_used=False):
         ps = self.__proxies(use_blocked, use_used)
         if not ps:
             return []
-        ps = ps[:count]
+        if count is not None:
+            ps = ps[:count]
         self.__proxies_used.update(ps)
         return ps

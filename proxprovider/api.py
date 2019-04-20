@@ -63,7 +63,7 @@ class ProxyApi:
         cls.__cache = {}
 
     @classmethod
-    def add_registry(cls, cls_obj):
+    def registry_provider(cls, cls_obj):
         cls.__registry[
             utils.convert_name(cls_obj.__name__)
         ] = cls_obj

@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='proxprovider',
@@ -8,6 +8,20 @@ setup(
     author='Maciej Gębarski',
     author_email='mgebarski@gmail.com',
     license='MIT',
-    packages=['proxprovider'],
-    zip_safe=False
+    packages=find_packages(exclude=['tests']),
+    zip_safe=False,
+    install_requires=[
+        'requests'
+    ],
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'License :: OSI Approved :: MIT License',
+        'Intended Audience :: Developers',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+    ],
 )

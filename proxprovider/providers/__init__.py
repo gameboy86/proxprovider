@@ -23,7 +23,7 @@ def exception(function):
 class ProxyProviderModelsRegister(type):
     def __init__(cls, name, bases, class_dict):
         if bases:
-            ProxyApi.add_registry(cls)
+            ProxyApi.registry_provider(cls)
 
         super().__init__(
             name, bases, class_dict
