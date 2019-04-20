@@ -20,7 +20,7 @@ def exception(function):
     return wrapper
 
 
-class ProxyProviderModelsRegister(type):
+class ProxProviderModelsRegister(type):
     def __init__(cls, name, bases, class_dict):
         if bases:
             ProxProviderApi.registry_provider(cls)
@@ -30,7 +30,7 @@ class ProxyProviderModelsRegister(type):
         )
 
 
-class ProxyProviderModelBase(metaclass=ProxyProviderModelsRegister):
+class ProxProviderModelBase(metaclass=ProxProviderModelsRegister):
     def __new__(cls, *args, **kwargs):
         cls.proxies = exception(cls.proxies)
         return super().__new__(cls)

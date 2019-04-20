@@ -75,7 +75,7 @@ New providers can be created in simply way. It mast be class witch inherit from
     >>> print(proxies_list)
     (total: 1, unused: 1, used: 0, blocked: 0)
     >>> proxies_list.get_proxies()
-    [ProxyAddress(type='simple_provider', address='129.168.1.1')]
+    [ProxyAddress(type='simple_provider', address='129.168.1.1:8080')]
 
 
 If, there is need to pass some additional data to providers, its must be

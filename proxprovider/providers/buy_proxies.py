@@ -1,9 +1,9 @@
 import requests
 
-from . import ProxyProviderModelBase
+from . import ProxProviderModelBase
 
 
-class BuyProxies(ProxyProviderModelBase):
+class BuyProxies(ProxProviderModelBase):
     """
     Provider for http://buyproxies.org/.
     Required parameters:

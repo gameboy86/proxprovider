@@ -1,7 +1,7 @@
-from . import ProxyProviderModelBase
+from . import ProxProviderModelBase
 
 
-class FromFile(ProxyProviderModelBase):
+class FromFile(ProxProviderModelBase):
     """
     Simple provider with reading proxies from file. There must be only one
     proxy for line.

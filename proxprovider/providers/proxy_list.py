@@ -1,9 +1,9 @@
 import requests
 
-from . import ProxyProviderModelBase
+from . import ProxProviderModelBase
 
 
-class ProxyList(ProxyProviderModelBase):
+class ProxyList(ProxProviderModelBase):
     """Provider for https://www.proxy-list.download.
     Required parameters:
         protocols: List, acceptable values are 'http', 'https'

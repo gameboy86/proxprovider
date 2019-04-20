@@ -1,9 +1,9 @@
 import requests
 
-from . import ProxyProviderModelBase
+from . import ProxProviderModelBase
 
 
-class GithubClarketm(ProxyProviderModelBase):
+class GithubClarketm(ProxProviderModelBase):
     """
     Simple provider witch download proxies from github 'Clarketm'
     Additional parameters:

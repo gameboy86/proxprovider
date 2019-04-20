@@ -1,7 +1,7 @@
 import unittest
 
 
-from ..providers import ProxyProviderModelBase
+from ..providers import ProxProviderModelBase
 from ..api import ProxProviderApi
 from ..utils import convert_name
 
@@ -11,7 +11,7 @@ class TestProxProviderApi(unittest.TestCase):
         pass
 
     def test_registry_provider(self):
-        class TestProvider(ProxyProviderModelBase):
+        class TestProvider(ProxProviderModelBase):
             """TEST DOC"""
             def proxies(self):
                 return ['192.168.1.1:8081']
