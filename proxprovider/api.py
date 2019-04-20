@@ -1,6 +1,7 @@
 import functools
 from importlib import import_module
-from os import listdir
+import inspect
+from os import listdir, path
 
 from . import utils
 from . import proxy
@@ -13,14 +14,7 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 class ProxProviderApi:
     __registry = {}
     __cache = {}
-    __models_dirs = None
     __imported_models = []
-
-    @classmethod
-    def registry_dir(cls, dir_path):
-        if cls.__models_dirs is None:
-            cls.__models_dirs = []
-        cls.__models_dirs.append(dir_path)
 
     @classmethod
     def imported_providers(cls):
@@ -45,18 +39,24 @@ class ProxProviderApi:
         if cls.__imported_models:
             cls.__imported_models = []
 
-        for dir_ in cls.__models_dirs:
-            for name in [
-                x for x in listdir(dir_)
-                if 'pyc' not in x and '__init__' not in x
-            ]:
-                try:
-                    import_module(
-                        'proxprovider.providers.{}'.format(name.split('.')[0])
-                    )
-                    cls.__imported_models.append(name)
-                except ImportError as e:
-                    print(e)
+        for name in [
+            x for x in listdir(
+                path.join(
+                    path.split(
+                        inspect.getfile(ProxProviderApi)
+                    )[0],
+                    'providers'
+                )
+            )
+            if 'pyc' not in x and '__init__' not in x
+        ]:
+            try:
+                import_module(
+                    'proxprovider.providers.{}'.format(name.split('.')[0])
+                )
+                cls.__imported_models.append(name)
+            except ImportError as e:
+                print(e)
 
     @classmethod
     def clear_cache(cls):
