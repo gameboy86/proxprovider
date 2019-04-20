@@ -10,7 +10,7 @@ import logging
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 
-class ProxyApi:
+class ProxProviderApi:
     __registry = {}
     __cache = {}
     __models_dirs = None

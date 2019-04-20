@@ -2,11 +2,11 @@ import unittest
 
 
 from ..providers import ProxyProviderModelBase
-from ..api import ProxyApi
+from ..api import ProxProviderApi
 from ..utils import convert_name
 
 
-class TestProxyApi(unittest.TestCase):
+class TestProxProviderApi(unittest.TestCase):
     def setUp(self):
         pass
 
@@ -17,10 +17,10 @@ class TestProxyApi(unittest.TestCase):
                 return ['192.168.1.1:8081']
 
         name = convert_name(TestProvider.__name__)
-        self.assertTrue(name in ProxyApi.available_providers())
+        self.assertTrue(name in ProxProviderApi.available_providers())
         pro = next(
             (
-                d for d in ProxyApi.imported_providers()
+                d for d in ProxProviderApi.imported_providers()
                 if d['name'] == name
             ),
             None

@@ -1,14 +1,14 @@
 import inspect
 from os import path
 
-from .api import ProxyApi
+from .api import ProxProviderApi
 
 
-__all__ = ['ProxyApi']
+__all__ = ['ProxProviderApi']
 
-ProxyApi.registry_dir(
+ProxProviderApi.registry_dir(
     path.join(
-        path.split(inspect.getfile(ProxyApi))[0], 'providers'
+        path.split(inspect.getfile(ProxProviderApi))[0], 'providers'
     )
 )
-ProxyApi.loads_models()
+ProxProviderApi.loads_models()

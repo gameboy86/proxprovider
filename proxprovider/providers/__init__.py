@@ -1,6 +1,6 @@
 import functools
 
-from ..api import ProxyApi
+from ..api import ProxProviderApi
 from ..exceptions import ProviderException
 
 
@@ -23,7 +23,7 @@ def exception(function):
 class ProxyProviderModelsRegister(type):
     def __init__(cls, name, bases, class_dict):
         if bases:
-            ProxyApi.registry_provider(cls)
+            ProxProviderApi.registry_provider(cls)
 
         super().__init__(
             name, bases, class_dict
