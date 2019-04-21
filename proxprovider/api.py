@@ -59,8 +59,11 @@ class ProxProviderApi:
                 print(e)
 
     @classmethod
-    def clear_cache(cls):
-        cls.__cache = {}
+    def clear_cache(cls, providers=None):
+        if providers is None:
+            cls.__cache = {}
+        for prov in providers:
+            del cls.__cache[prov]
 
     @classmethod
     def registry_provider(cls, cls_obj):
@@ -72,6 +75,7 @@ class ProxProviderApi:
         self, use_cache=True, providers=None, providers_config=None
     ):
         self.providers = providers
+        self.providers_config = providers_config
         self.use_cache = use_cache
 
         for name, class_ in list(self.__registry.items()):
@@ -102,24 +106,47 @@ class ProxProviderApi:
     def __proxies(self, name, *args, **kwargs):
         return self.model_by_key(name)().proxies(*args, **kwargs)
 
-    def proxies(self):
-        if self.__cache and self.use_cache:
-            return self.__cache
+    def __provider_from_cache(self, provider):
+        return self.__cache.get(provider)
 
+    def __proxies_for_provider(self, provider):
+        conf = self.provider_config(provider)
+
+        omit_cache = (
+            conf.get('omit_cache')
+            if conf else False
+        )
+
+        cache = self.__provider_from_cache(provider)
+        if self.use_cache and cache and not omit_cache:
+            return cache
+
+        try:
+            func = getattr(
+                self, '_{}_get_proxies'.format(provider)
+            )
+            proxies = func()
+
+        except ProviderException as e:
+            logging.warning("provider '{}' {}".format(
+                provider, e.args[0]
+            ))
+            return
+        if self.use_cache and not omit_cache:
+            self.__cache[provider] = proxies
+        return proxies
+
+    def provider_config(self, provider):
+        if self.providers_config:
+            return self.providers_config.get(provider)
+        return None
+
+    def proxies(self):
         out = {}
         for name, class_ in list(self.__registry.items()):
             if self.providers and name not in self.providers:
                 continue
-            try:
-                func = getattr(
-                    self, '_{}_get_proxies'.format(name)
-                )
-                out[name] = func()
-
-            except ProviderException as e:
-                logging.warning("provider '{}' {}".format(
-                    name, e.args[0]
-                ))
-
-        self.__cache = proxy.Proxies(out)
-        return self.__cache
+            proxs = self.__proxies_for_provider(name)
+            if proxs is not None:
+                out.update({name: proxs})
+        return proxy.Proxies(out)

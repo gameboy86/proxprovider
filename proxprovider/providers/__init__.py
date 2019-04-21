@@ -20,6 +20,17 @@ def exception(function):
     return wrapper
 
 
+def remove_extra_parameters(function):
+    @functools.wraps(function)
+    def wrapper(*args, **kwargs):
+        try:
+            kwargs.pop('omit_cache')
+        except KeyError:
+            pass
+        return function(*args, **kwargs)
+    return wrapper
+
+
 class ProxProviderModelsRegister(type):
     def __init__(cls, name, bases, class_dict):
         if bases:
@@ -32,7 +43,7 @@ class ProxProviderModelsRegister(type):
 
 class ProxProviderModelBase(metaclass=ProxProviderModelsRegister):
     def __new__(cls, *args, **kwargs):
-        cls.proxies = exception(cls.proxies)
+        cls.proxies = remove_extra_parameters(exception(cls.proxies))
         return super().__new__(cls)
 
     def proxies(self, **kwargs):
