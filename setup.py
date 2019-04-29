@@ -4,7 +4,7 @@ setup(
     name='proxprovider',
     version='0.1',
     description='Manage many proxy providers from one place',
-    # url='http://github.com/storborg/funniest',
+    url='https://github.com/gameboy86/proxprovider',
     author='Maciej Gębarski',
     author_email='mgebarski@gmail.com',
     license='MIT',
