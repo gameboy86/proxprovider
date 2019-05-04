@@ -1,3 +1,4 @@
+from concurrent import futures
 import functools
 from importlib import import_module
 import inspect
@@ -143,10 +144,23 @@ class ProxProviderApi:
 
     def proxies(self):
         out = {}
-        for name, class_ in list(self.__registry.items()):
-            if self.providers and name not in self.providers:
-                continue
-            proxs = self.__proxies_for_provider(name)
-            if proxs is not None:
-                out.update({name: proxs})
+        with futures.ThreadPoolExecutor(max_workers=4) as executor:
+            to_do = {}
+
+            for name, class_ in list(self.__registry.items()):
+                if self.providers and name not in self.providers:
+                    continue
+
+                future = executor.submit(self.__proxies_for_provider, name)
+                to_do[name] = future
+
+            for name, future in to_do.items():
+                f = future
+                if f.exception():
+                    logging.exception("provider '{}' {}".format(
+                        name, f.exception()
+                    ))
+                else:
+                    if f.result():
+                        out.update({name: f.result()})
         return proxy.Proxies(out)
