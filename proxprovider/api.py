@@ -63,8 +63,9 @@ class ProxProviderApi:
     def clear_cache(cls, providers=None):
         if providers is None:
             cls.__cache = {}
-        for prov in providers:
-            del cls.__cache[prov]
+        else:
+            for prov in providers:
+                del cls.__cache[prov]
 
     @classmethod
     def registry_provider(cls, cls_obj):
