@@ -9,12 +9,12 @@ from . import proxy
 from .exceptions import ProviderException
 
 import logging
+
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 
 class ProxProviderApi:
     __registry = {}
-    __cache = {}
     __imported_models = []
 
     @classmethod
@@ -60,25 +60,16 @@ class ProxProviderApi:
                 print(e)
 
     @classmethod
-    def clear_cache(cls, providers=None):
-        if providers is None:
-            cls.__cache = {}
-        else:
-            for prov in providers:
-                del cls.__cache[prov]
-
-    @classmethod
     def registry_provider(cls, cls_obj):
         cls.__registry[
             utils.convert_name(cls_obj.__name__)
         ] = cls_obj
 
     def __init__(
-        self, use_cache=True, providers=None, providers_config=None
+        self, providers=None, providers_config=None
     ):
         self.providers = providers
         self.providers_config = providers_config
-        self.use_cache = use_cache
 
         for name, class_ in list(self.__registry.items()):
             if providers and name not in providers:
@@ -96,33 +87,15 @@ class ProxProviderApi:
                     )
                 )
 
-    def __str__(self):
-        return "({})".format(self.use_cache)
-
     def __repr__(self):
-        return "{}({})".format(
+        return "{}".format(
             self.__class__.__name__,
-            self.use_cache
         )
 
     def __proxies(self, name, *args, **kwargs):
         return self.model_by_key(name)().proxies(*args, **kwargs)
 
-    def __provider_from_cache(self, provider):
-        return self.__cache.get(provider)
-
     def __proxies_for_provider(self, provider):
-        conf = self.provider_config(provider)
-
-        omit_cache = (
-            conf.get('omit_cache')
-            if conf else False
-        )
-
-        cache = self.__provider_from_cache(provider)
-        if self.use_cache and cache and not omit_cache:
-            return cache
-
         try:
             func = getattr(
                 self, '_{}_get_proxies'.format(provider)
@@ -134,8 +107,6 @@ class ProxProviderApi:
                 provider, e.args[0]
             ))
             return
-        if self.use_cache and not omit_cache:
-            self.__cache[provider] = proxies
         return proxies
 
     def provider_config(self, provider):
