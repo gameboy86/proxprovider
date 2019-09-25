@@ -19,7 +19,8 @@ class BuyProxies(ProxProviderModelBase):
         for line in requests.get(url, timeout=timeout).text.splitlines():
             line = line.split(':')
             if len(line) != 4:
-                continue
+                raise Exception(','.join(line))
+
             out.append("http://{login}:{passwd}@{host}:{port}".format(
                 login=line[3], passwd=line[2], host=line[0],
                 port=line[1]
